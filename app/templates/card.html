@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ card.name }}'s AI Digital Business Card | Google Cloud x Seoul</title>
+  <link rel="stylesheet" href="/static/css/style.css?v=20">
+</head>
+
+<body style="background: #070913; color: #ffffff; padding: 1.5rem 1rem; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;">
+
+  <!-- Mobile Top Header -->
+  <div style="width: 100%; max-width: 440px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+    <div style="display: flex; align-items: center; gap: 6px;">
+      <span style="width: 8px; height: 8px; border-radius: 50%; background: #FF6B9E; display: inline-block;"></span>
+      <span style="width: 8px; height: 8px; border-radius: 50%; background: #FFD232; display: inline-block;"></span>
+      <span style="width: 8px; height: 8px; border-radius: 50%; background: #00B2A9; display: inline-block;"></span>
+      <span style="font-weight: 800; font-size: 0.9rem; background: linear-gradient(135deg, #FF6B9E, #FFD232, #00B2A9); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">SEOUL x Google Cloud</span>
+    </div>
+    <span style="font-size: 0.75rem; background: rgba(0,178,169,0.2); border: 1px solid rgba(0,178,169,0.5); color: #00B2A9; padding: 0.2rem 0.6rem; border-radius: 999px; font-weight: 700;">SLW 2026</span>
+  </div>
+
+  <!-- Main Card Container -->
+  <div style="width: 100%; max-width: 440px;">
+
+    {% if card.avatar_image %}
+    <!-- Generated AI 3D Card Artwork -->
+    <div style="position: relative; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); margin-bottom: 1.25rem;">
+      <img id="mobileCardImg" src="{{ card.avatar_image }}" alt="{{ card.name }}'s AI Card Artwork" style="width: 100%; height: auto; display: block;">
+    </div>
+    {% else %}
+    <!-- Persona Summary Card Fallback -->
+    <div class="persona-card" style="margin-bottom: 1.25rem; padding: 1.5rem; background: linear-gradient(145deg, #0f172a, #1e293b); border-radius: 20px; border: 1px solid rgba(255,255,255,0.15);">
+      <div style="font-size: 1.8rem; font-weight: 800; color: #ffffff; margin-bottom: 0.25rem;">{{ card.name }}</div>
+      <div style="font-size: 1rem; color: #00B2A9; font-weight: 700; margin-bottom: 0.75rem;">{{ card.role }} @ {{ card.company }}</div>
+      
+      <div class="persona-title-highlight" style="font-size: 1.1rem; margin-bottom: 0.5rem;">{{ card.persona_title or 'Global AI Visionary' }}</div>
+      <p class="persona-bio-text" style="font-size: 0.9rem; line-height: 1.5; color: #cbd5e1; margin-bottom: 1rem;">{{ card.persona_bio }}</p>
+
+      {% if card.quote %}
+      <div style="font-style: italic; font-size: 0.85rem; color: #FFD232; border-left: 3px solid #FFD232; padding-left: 0.75rem; margin-bottom: 1rem;">
+        "{{ card.quote }}"
+      </div>
+      {% endif %}
+
+      <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+        {% for sp in card.superpowers %}
+        <span style="font-size: 0.75rem; padding: 0.25rem 0.65rem; background: rgba(66,133,244,0.2); border: 1px solid rgba(66,133,244,0.4); border-radius: 999px; color: #60a5fa;">{{ sp }}</span>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Action Buttons -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.25rem;">
+      {% if card.avatar_image %}
+      <a id="btnSaveImage" href="{{ card.avatar_image }}" download="{{ card.name }}_ai_card.png" style="display: flex; justify-content: center; align-items: center; gap: 6px; padding: 0.9rem; background: linear-gradient(135deg, #00B2A9, #4285F4); color: #ffffff; text-decoration: none; border-radius: 14px; font-weight: 700; font-size: 0.9rem; box-shadow: 0 8px 20px rgba(0,178,169,0.3);">
+        📥 Save Image
+      </a>
+      {% endif %}
+      <button onclick="copyContact()" style="display: flex; justify-content: center; align-items: center; gap: 6px; padding: 0.9rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #ffffff; border-radius: 14px; font-weight: 700; font-size: 0.9rem; cursor: pointer;">
+        📋 Copy Contact
+      </button>
+    </div>
+
+    <!-- Security Expiration Notice -->
+    <div style="padding: 0.85rem 1rem; background: rgba(255, 107, 158, 0.1); border: 1px solid rgba(255, 107, 158, 0.3); border-radius: 12px; text-align: center; font-size: 0.78rem; color: #e2e8f0; line-height: 1.4;">
+      🔒 <strong>Data Privacy Notice:</strong> This mobile card view automatically expires 10 minutes after creation to protect visitor personal information.
+    </div>
+
+  </div>
+
+  <script>
+    function copyContact() {
+      const text = `[Seoul SLW 2026] {{ card.name }} ({{ card.role }} @ {{ card.company }})\nEmail: {{ card.email }}\nPhone: {{ card.phone }}`;
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Contact information copied to clipboard!');
+      }).catch(() => {
+        alert('Failed to copy. Please try again.');
+      });
+    }
+  </script>
+
+</body>
+
+</html>

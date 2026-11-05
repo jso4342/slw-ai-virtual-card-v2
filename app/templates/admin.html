@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booth Lead Capture Dashboard | Google Cloud x Seoul SLW</title>
+  <link rel="stylesheet" href="/static/css/style.css?v=20">
+</head>
+
+<body style="background: #070913; color: #ffffff; padding: 2rem 1.5rem; min-height: 100vh;">
+
+  <!-- Dashboard Top Header -->
+  <header style="max-width: 1200px; margin: 0 auto 2rem; display: flex; justify-content: space-between; align-items: center; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.15); padding: 1.25rem 2rem; border-radius: 20px;">
+    <div>
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+        <span style="width: 10px; height: 10px; border-radius: 50%; background: #FF6B9E; display: inline-block;"></span>
+        <span style="width: 10px; height: 10px; border-radius: 50%; background: #FFD232; display: inline-block;"></span>
+        <span style="width: 10px; height: 10px; border-radius: 50%; background: #00B2A9; display: inline-block;"></span>
+        <span style="font-weight: 800; font-size: 1.1rem; background: linear-gradient(135deg, #FF6B9E, #FFD232, #00B2A9); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">SEOUL x Google Cloud</span>
+      </div>
+      <h1 style="font-size: 1.6rem; font-weight: 800; margin: 0; color: #ffffff;">Booth Lead Capture Analytics</h1>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 1rem;">
+      <a href="/api/leads/export" style="display: inline-flex; align-items: center; gap: 6px; padding: 0.75rem 1.25rem; background: linear-gradient(135deg, #00B2A9, #4285F4); color: #ffffff; text-decoration: none; border-radius: 12px; font-weight: 700; font-size: 0.9rem; box-shadow: 0 6px 15px rgba(0,178,169,0.3);">
+        📥 Export CSV
+      </a>
+      <a href="/api/admin/logout" style="padding: 0.75rem 1rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #cbd5e1; text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 0.85rem;">
+        Logout
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main style="max-width: 1200px; margin: 0 auto;">
+
+    <!-- Summary Stats Bar -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
+      <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255,255,255,0.1); padding: 1.25rem 1.5rem; border-radius: 16px;">
+        <div style="font-size: 0.85rem; color: #94a3b8; font-weight: 600; margin-bottom: 4px;">Total Captured Leads</div>
+        <div style="font-size: 2rem; font-weight: 800; color: #00B2A9;">{{ cards | length }}</div>
+      </div>
+      <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255,255,255,0.1); padding: 1.25rem 1.5rem; border-radius: 16px;">
+        <div style="font-size: 0.85rem; color: #94a3b8; font-weight: 600; margin-bottom: 4px;">Marketing Opt-In Rate</div>
+        <div style="font-size: 2rem; font-weight: 800; color: #FFD232;">
+          {% set consent_count = cards | selectattr("marketing_consent") | list | length %}
+          {% if cards | length > 0 %}
+            {{ ((consent_count / (cards | length)) * 100) | round(1) }}%
+          {% else %}
+            0%
+          {% endif %}
+        </div>
+      </div>
+      <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255,255,255,0.1); padding: 1.25rem 1.5rem; border-radius: 16px;">
+        <div style="font-size: 0.85rem; color: #94a3b8; font-weight: 600; margin-bottom: 4px;">AI Model Engine</div>
+        <div style="font-size: 1.1rem; font-weight: 700; color: #60a5fa; margin-top: 6px;">Gemini 3.5 Flash & 3.1 Flash Image</div>
+      </div>
+    </div>
+
+    <!-- Leads Table -->
+    <div style="background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.4);">
+      <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center;">
+        <h2 style="font-size: 1.2rem; font-weight: 700; margin: 0; color: #ffffff;">Captured Visitor Records</h2>
+        <span style="font-size: 0.8rem; color: #94a3b8;">Showing {{ cards | length }} items</span>
+      </div>
+
+      <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem;">
+          <thead>
+            <tr style="background: rgba(255,255,255,0.05); color: #94a3b8; border-bottom: 1px solid rgba(255,255,255,0.1);">
+              <th style="padding: 1rem 1.25rem; font-weight: 700;">ID</th>
+              <th style="padding: 1rem 1.25rem; font-weight: 700;">Timestamp</th>
+              <th style="padding: 1rem 1.25rem; font-weight: 700;">Name</th>
+              <th style="padding: 1rem 1.25rem; font-weight: 700;">Company</th>
+              <th style="padding: 1rem 1.25rem; font-weight: 700;">Role / Title</th>
+              <th style="padding: 1rem 1.25rem; font-weight: 700;">Email</th>
+              <th style="padding: 1rem 1.25rem; font-weight: 700;">Phone</th>
+              <th style="padding: 1rem 1.25rem; font-weight: 700;">Persona Title</th>
+              <th style="padding: 1rem 1.25rem; font-weight: 700;">Consent</th>
+              <th style="padding: 1rem 1.25rem; font-weight: 700; text-align: center;">View Card</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for c in cards %}
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.03)'" onmouseout="this.style.background='transparent'">
+              <td style="padding: 1rem 1.25rem; font-family: monospace; color: #00B2A9; font-weight: 700;">{{ c.id }}</td>
+              <td style="padding: 1rem 1.25rem; color: #cbd5e1; font-size: 0.8rem;">{{ c.created_at[:16] if c.created_at else '-' }}</td>
+              <td style="padding: 1rem 1.25rem; font-weight: 700; color: #ffffff;">{{ c.name }}</td>
+              <td style="padding: 1rem 1.25rem; color: #e2e8f0;">{{ c.company }}</td>
+              <td style="padding: 1rem 1.25rem; color: #60a5fa; font-weight: 600;">{{ c.role }}</td>
+              <td style="padding: 1rem 1.25rem; color: #cbd5e1;">{{ c.email or '-' }}</td>
+              <td style="padding: 1rem 1.25rem; color: #cbd5e1;">{{ c.phone or '-' }}</td>
+              <td style="padding: 1rem 1.25rem; color: #FFD232; font-weight: 600;">{{ c.persona_title or '-' }}</td>
+              <td style="padding: 1rem 1.25rem;">
+                {% if c.marketing_consent %}
+                <span style="padding: 0.2rem 0.6rem; background: rgba(52,168,83,0.2); border: 1px solid rgba(52,168,83,0.4); color: #4ade80; border-radius: 999px; font-size: 0.75rem; font-weight: 700;">Yes</span>
+                {% else %}
+                <span style="padding: 0.2rem 0.6rem; background: rgba(255,255,255,0.1); color: #94a3b8; border-radius: 999px; font-size: 0.75rem;">No</span>
+                {% endif %}
+              </td>
+              <td style="padding: 1rem 1.25rem; text-align: center;">
+                <a href="/card/{{ c.id }}" target="_blank" style="color: #60a5fa; text-decoration: none; font-weight: 700; font-size: 0.82rem; padding: 0.35rem 0.75rem; background: rgba(96,165,250,0.15); border: 1px solid rgba(96,165,250,0.3); border-radius: 8px;">
+                  🔗 Card
+                </a>
+              </td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="10" style="padding: 3rem; text-align: center; color: #94a3b8;">
+                No visitor records captured yet.
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+</body>
+
+</html>

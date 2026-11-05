@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard Security | Google Cloud x Seoul</title>
+  <link rel="stylesheet" href="/static/css/style.css?v=20">
+</head>
+
+<body style="background: #070913; color: #ffffff; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1rem;">
+
+  <div style="width: 100%; max-width: 400px; padding: 2.5rem 2rem; background: linear-gradient(145deg, #0f172a, #1e293b); border-radius: 24px; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 20px 50px rgba(0,0,0,0.6); text-align: center;">
+    
+    <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">📊</div>
+    <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; background: linear-gradient(135deg, #FF6B9E, #FFD232); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Lead Dashboard Gate</h2>
+    <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 1.5rem; line-height: 1.5;">Please enter the admin passcode to access booth lead capture analytics and CSV export.</p>
+
+    <form id="adminPasscodeForm" onsubmit="verifyAdminPasscode(event)">
+      <div style="margin-bottom: 1.25rem;">
+        <input type="password" id="inputAdminPasscode" placeholder="Enter Admin Passcode" required style="width: 100%; padding: 0.9rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; color: #ffffff; font-size: 1rem; text-align: center; letter-spacing: 2px;">
+      </div>
+
+      <button type="submit" style="width: 100%; padding: 0.9rem; background: linear-gradient(135deg, #FF6B9E, #FFD232); border: none; border-radius: 12px; color: #0f172a; font-weight: 800; font-size: 1rem; cursor: pointer; box-shadow: 0 8px 20px rgba(255,107,158,0.3);">
+        Unlock Dashboard 📊
+      </button>
+    </form>
+
+    <div id="errorMessage" style="display: none; margin-top: 1rem; padding: 0.65rem; background: rgba(255,77,79,0.15); border: 1px solid rgba(255,77,79,0.4); border-radius: 10px; color: #ff4d4f; font-size: 0.8rem; font-weight: 600;"></div>
+
+  </div>
+
+  <script>
+    async function verifyAdminPasscode(e) {
+      e.preventDefault();
+      const code = document.getElementById('inputAdminPasscode').value.trim();
+      const errBox = document.getElementById('errorMessage');
+      errBox.style.display = 'none';
+
+      try {
+        const res = await fetch('/api/verify-admin-passcode', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({passcode: code})
+        });
+        const data = await res.json();
+        if (data.success) {
+          window.location.reload();
+        } else {
+          errBox.textContent = data.error || 'Incorrect admin passcode.';
+          errBox.style.display = 'block';
+        }
+      } catch (err) {
+        errBox.textContent = 'Network connection error. Please try again.';
+        errBox.style.display = 'block';
+      }
+    }
+  </script>
+
+</body>
+
+</html>

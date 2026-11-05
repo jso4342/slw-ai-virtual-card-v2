@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seoul Smart City x Google Cloud - AI Digital Business Card Generator</title>
+  <link rel="stylesheet" href="/static/css/style.css?v=20">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <!-- Kiosk Header -->
+  <header class="kiosk-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 1rem 2rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); background: rgba(7, 9, 19, 0.85); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 100;">
+    <div class="kiosk-logo" style="display: flex; align-items: center; gap: 8px;">
+      <div style="display: flex; align-items: center; gap: 4px;">
+        <span style="width: 10px; height: 10px; border-radius: 50%; background: #FF6B9E; display: inline-block;"></span>
+        <span style="width: 10px; height: 10px; border-radius: 50%; background: #FFD232; display: inline-block;"></span>
+        <span style="width: 10px; height: 10px; border-radius: 50%; background: #00B2A9; display: inline-block;"></span>
+      </div>
+      <span
+        style="font-weight: 800; letter-spacing: -0.5px; background: linear-gradient(135deg, #FF6B9E, #FFD232, #00B2A9); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">SEOUL</span>
+      <span style="color: #cbd5e1; font-weight: 400; font-size: 1.1rem; margin: 0 4px;">x</span>
+      <span style="font-weight: 700; color: #ffffff;">Google Cloud</span>
+      <span style="font-weight: 300; color: #94a3b8; font-size: 0.9rem; margin-left: 6px;">Smart Life Week 2026</span>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 0.75rem;">
+      <span class="gcloud-badge"
+        style="background: linear-gradient(135deg, rgba(255, 107, 158, 0.2), rgba(0, 178, 169, 0.2)); border: 1px solid rgba(255, 210, 50, 0.6); color: #ffffff; font-weight: 700;">AI
+        Card v2.0</span>
+    </div>
+  </header>
+
+  <!-- Kiosk Main Container -->
+  <main class="kiosk-container">
+
+    <!-- Left Panel: Visitor Input Form -->
+    <section class="form-panel">
+      <div
+        style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 9999px; background: rgba(255, 107, 158, 0.15); border: 1px solid rgba(255, 107, 158, 0.3); color: #FF6B9E; font-size: 0.8rem; font-weight: 700; margin-bottom: 0.75rem;">
+        ✨ SEOUL MY SOUL • Smart Life Week
+      </div>
+      <h1 class="panel-title" style="font-size: 2.1rem; letter-spacing: -0.5px;">AI Digital Business Card</h1>
+      <p style="font-size: 0.95rem; color: #e2e8f0; margin-top: -0.25rem; margin-bottom: 1.25rem; line-height: 1.5;">
+        🏙️ Welcome to <strong>Seoul Smart City Global Summit</strong>! Create your personalized 3D AI Digital Business Card powered by Google Cloud Gemini AI.
+      </p>
+
+      <form id="cardForm" onsubmit="return false;">
+        <!-- Name & Company -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label" for="inputName">Full Name *</label>
+            <input type="text" id="inputName" class="form-input" placeholder="e.g. Alex Morgan" value="Alex Morgan" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="inputCompany">Company / Organization *</label>
+            <input type="text" id="inputCompany" class="form-input" placeholder="e.g. Global Tech Corp" value="Global Tech Corp" required>
+          </div>
+        </div>
+
+        <!-- Role / Title -->
+        <div class="form-group">
+          <label class="form-label" for="inputRole">Professional Role / Title *</label>
+          <input type="text" id="inputRole" class="form-input" placeholder="e.g. AI Solutions Architect, Tech Lead, Product Manager" value="AI Solutions Architect" required>
+        </div>
+
+        <!-- Contact Info -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label" for="inputEmail">Email Address</label>
+            <input type="email" id="inputEmail" class="form-input" placeholder="alex.morgan@globaltech.com"
+              value="alex.morgan@globaltech.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="inputPhone">Phone Number</label>
+            <input type="text" id="inputPhone" class="form-input" placeholder="+1 415-555-0199" value="+1 415-555-0199">
+          </div>
+        </div>
+
+        <!-- Webcam Photo Component -->
+        <div class="webcam-section">
+          <label class="form-label"
+            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+            <span>📸 Take a Photo</span>
+            <span class="gcloud-badge" style="font-size: 0.7rem; padding: 0.2rem 0.6rem;">Gemini 3.1 Flash Image</span>
+          </label>
+
+          <div class="webcam-box" id="webcamBox">
+            <video id="webcamVideo" autoplay playsinline style="display: none;"></video>
+            <img id="photoCapturedImg" src="" alt="Captured Photo" style="display: none;">
+            <div id="webcamPlaceholder"
+              style="text-align: center; color: var(--text-muted); font-size: 0.85rem; padding: 1.5rem;">
+              <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">📷</div>
+              Click <strong>[Turn On Camera]</strong> to capture your face.<br>
+              <span style="font-size: 0.75rem; opacity: 0.7;">(A default 3D avatar will be generated if skipped)</span>
+            </div>
+          </div>
+
+          <!-- Privacy Protection Notice -->
+          <div
+            style="font-size: 0.8rem; color: #ff4d4f; font-weight: 700; margin-top: 0.6rem; margin-bottom: 0.6rem; text-align: center;">
+            🔒 Captured photos are immediately destroyed after card artwork generation.
+          </div>
+
+          <div class="webcam-actions">
+            <button type="button" class="btn-webcam" id="btnStartWebcam">
+              <span>🎥 Turn On Camera</span>
+            </button>
+            <button type="button" class="btn-webcam" id="btnSnapPhoto"
+              style="display: none; background: linear-gradient(135deg, var(--gcloud-blue), var(--accent-purple)); border-color: var(--accent-cyan);">
+              <span>📸 Snap Photo</span>
+            </button>
+            <button type="button" class="btn-webcam" id="btnRetakePhoto" style="display: none;">
+              <span>🔄 Retake</span>
+            </button>
+          </div>
+
+          <canvas id="webcamCanvas" style="display: none;"></canvas>
+        </div>
+
+        <!-- Lifestyle Keywords Grid -->
+        <div class="form-group">
+          <label class="form-label">Lifestyle & Interest Keywords (Select or Add Custom)</label>
+
+          <div class="keywords-grid" id="keywordsGrid">
+            <span class="tag-btn" data-value="Dog Lover" data-default="true">🐶 Dog Lover</span>
+            <span class="tag-btn" data-value="Cat Lover" data-default="true">🐱 Cat Lover</span>
+            <span class="tag-btn" data-value="Fitness Enthusiast" data-default="true">🏋️ Fitness Enthusiast</span>
+            <span class="tag-btn" data-value="Cycling & Bike" data-default="true">🚴 Cycling & Bike</span>
+            <span class="tag-btn" data-value="Marathon Runner" data-default="true">🏃 Marathon Runner</span>
+            <span class="tag-btn" data-value="Coffee Connoisseur" data-default="true">☕ Coffee Connoisseur</span>
+            <span class="tag-btn" data-value="Camping & Outdoor" data-default="true">⛺ Camping & Outdoor</span>
+            <span class="tag-btn" data-value="Foodie" data-default="true">🍕 Foodie</span>
+            <span class="tag-btn" data-value="Music & Podcasts" data-default="true">🎧 Music & Podcasts</span>
+            <span class="tag-btn" data-value="Yoga & Wellness" data-default="true">🧘 Yoga & Wellness</span>
+            <span class="tag-btn" data-value="Photography" data-default="true">📸 Photography</span>
+            <span class="tag-btn" data-value="Early Riser" data-default="true">🌅 Early Riser</span>
+          </div>
+
+          <!-- Custom Tag Input -->
+          <div class="custom-tag-group">
+            <input type="text" id="inputCustomTag" class="form-input custom-tag-input"
+              placeholder="Type custom keyword and press Enter or click Add">
+            <button type="button" id="btnAddTag" class="btn-add-tag">✚ Add</button>
+          </div>
+        </div>
+
+        <!-- Card Visual Themes -->
+        <div class="form-group">
+          <label class="form-label">Card Visual Theme (Seoul Landmarks & Ambience)</label>
+          <div class="theme-options">
+            <div class="theme-card active" data-theme="hangang">
+              <div style="font-size: 1.3rem;">🌉</div>
+              Yeouido River
+            </div>
+            <div class="theme-card" data-theme="gwanghwamun">
+              <div style="font-size: 1.3rem;">🏯</div>
+              Grand Palace
+            </div>
+            <div class="theme-card" data-theme="myeongdong">
+              <div style="font-size: 1.3rem;">🏙️</div>
+              DDP Future
+            </div>
+            <div class="theme-card" data-theme="seongsu">
+              <div style="font-size: 1.3rem;">🧱</div>
+              Seongsu Hipster
+            </div>
+            <div class="theme-card" data-theme="seoul">
+              <div style="font-size: 1.3rem;">💖</div>
+              SEOUL MY SOUL
+            </div>
+            <div class="theme-card" data-theme="gcloud">
+              <div style="font-size: 1.3rem;">☁️</div>
+              Google Cloud
+            </div>
+          </div>
+        </div>
+
+        <!-- Marketing Consent -->
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="inputConsent">
+            <span>[Required] I agree to the collection and processing of personal data for follow-up consultation and service provision.</span>
+          </label>
+        </div>
+
+        <button type="button" id="btnSubmitForm" class="btn-generate">
+          <span>✨ Generate AI Business Card</span>
+        </button>
+      </form>
+    </section>
+
+    <!-- Right Panel: Realtime 3D Virtual Card Preview -->
+    <section class="preview-panel">
+
+      <!-- 3D Card Wrapper -->
+      <div class="card-wrapper" id="cardWrapper">
+
+        <!-- Loading Overlay -->
+        <div class="loading-overlay" id="loadingOverlay">
+          <div class="ai-spinner"></div>
+          <div class="loading-text">Google Cloud Gemini 3.5 AI</div>
+          <div class="loading-step" id="loadingStep">Analyzing facial features and crafting 3D avatar artwork...</div>
+        </div>
+
+        <!-- Virtual Persona Card Component -->
+        <div class="persona-card theme-seoul" id="personaCard">
+
+          <!-- Card Header -->
+          <div class="card-header-row" id="cardHeaderRow">
+            <span class="card-title-tag">SLW 2026 GLOBAL</span>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">AI Digital Business Card</span>
+          </div>
+
+          <!-- Generated Card Image Wrapper -->
+          <div id="generatedCardImageWrapper" style="display: none; width: 100%; margin: 0.75rem 0;">
+            <img id="generatedCardImg" src="" alt="Seoul AI 3D Digital Business Card"
+              style="width: 100%; height: auto; border-radius: 16px; box-shadow: 0 12px 35px rgba(0,0,0,0.5); display: block; border: 1px solid rgba(255, 255, 255, 0.2);">
+          </div>
+
+          <!-- Default Placeholder -->
+          <div id="defaultCardTextWrapper">
+            <div class="card-avatar-box" id="cardAvatarBox">☁️</div>
+
+            <!-- AI Persona Content Placeholder -->
+            <div class="persona-title-highlight" id="cardPersonaTitle">Global Visionary</div>
+            <p class="persona-bio-text" id="cardPersonaBio">Fill out your details on the left and click [✨ Generate AI Business Card] to create your custom 3D digital card artwork powered by Gemini AI!</p>
+          </div>
+
+          <!-- Card Footer QR Code -->
+          <div class="card-footer-row" id="cardFooterRow" style="display: none; margin-top: 1rem;">
+            <div class="contact-info">
+              <div style="font-size: 0.8rem; color: #00B2A9; font-weight: 700; margin-bottom: 2px;">📱 Mobile Card View (Valid 10 mins)</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">Scan QR to view and save card on your smartphone</div>
+            </div>
+            <div class="qr-box">
+              <img id="cardQrImg" src="" alt="Card QR Code">
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="card-actions">
+        <button class="btn-action btn-print-card" id="btnPrintCard"
+          style="display: none; background: linear-gradient(135deg, rgba(0,178,169,0.3), rgba(52,168,83,0.3)); border-color: rgba(0,178,169,0.5);">
+          <span>🖨️ Print Physical Card (54x86mm)</span>
+        </button>
+        <button class="btn-action" id="btnNewCard" style="display: none;">
+          <span>🔄 Next Visitor</span>
+        </button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script src="/static/js/app.js?v=20"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+</body>
+
+</html>
